@@ -1,0 +1,5 @@
+:linkcss:
+:stylesdir: https://darshandsoni.com/asciidoctor-skins/css
+:stylesheet: clean.css
+:docinfodir: {asciidoctorconfigdir}/config
+:docinfo: shared
