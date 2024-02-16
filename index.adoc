@@ -1,0 +1,35 @@
+= Spring Cloud
+
+== index
+
+* link:{docdir}/docs/01.Spring-Cloud/index.adoc[01.Spring-Cloud]
+* link:docs/02.API-Gateway-Pattern/index.adoc[02.API-Gateway]
+* link:docs/03.Service-Discovery-Pattern/index.adoc[03.Service-Discovery]
+
+
+== Test 환경
+
+* Eureka
+** http://localhost:8761  , profile : peer1
+** http://localhost:8762  , profile : peer2
+** Spring Security 기반 인증
+*** admin/1234
+** port : 8761, 8762 이중화 설정되어 있음
+
+* Spring Cloud Gateway
+** http://localhost:8080
+* hello-service
+** http://localhost:8081   , profile : dev
+** http://localhost:8082   , profile : prod
+* auth-service
+** http://localhost:8090
+
+== OpenFeignClent 예제
+* link:hello/src/main/java/com/nhnacademy/hello/adapter/MemberAdapter.java[MemberAdapter]
+** hello-service 에서 auth-service의 member를 조회하는 간단한 예제
+
+[source,httprequest]
+----
+http://localhost:8081/member/marco
+----
+
