@@ -37,10 +37,10 @@ public class RouteLocatorConfig {
 
 //        return builder.routes()
 //                .route("hello-service-a",
-//                        p->p.path("/hello").and().weight("account",50).uri("http://localhost:8081/")
+//                        p->p.path("/hello").and().weight("account",50).uri("http://192.168.71.59:8081/")
 //                        )
 //                .route("hello-service-b",
-//                        p->p.path("/hello").and().weight("account",50).uri("http://localhost:8082/")
+//                        p->p.path("/hello").and().weight("account",50).uri("http://192.168.71.59:8082/")
 //                        )
 //                .build();
 

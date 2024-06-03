@@ -34,7 +34,7 @@ image:resources/image-2.png[]
 ** Gateway
 
 
-image:resources/image-3.png[]
+image:resources/image-5.png[]
 
 
 === Dependency

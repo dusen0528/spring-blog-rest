@@ -50,6 +50,30 @@ image:resources/image-1.png[]
 </dependencyManagement>
 ----
 
+* Spring Boot 3.3.x  --> 2023.0.2
+** https://github.com/spring-cloud/spring-cloud-release/wiki/Supported-Versions#supported-releases
+
+[source,xml]
+----
+<properties>
+    <spring-cloud.version>2023.0.2</spring-cloud.version>
+</properties>
+
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring-cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+
+
 * USE
 
 [source,xml]

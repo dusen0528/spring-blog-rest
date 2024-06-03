@@ -13,6 +13,7 @@
 package com.nhnacademy.auth.web;
 
 import com.nhnacademy.auth.domain.Member;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +26,10 @@ import java.util.Random;
 public class AuthController {
 
     @GetMapping("/{id}")
-    public Member getMember(@PathVariable("id")String id){
+    public ResponseEntity<Member> getMember(@PathVariable("id")String id){
         int age = new Random().ints(20,60 ).findFirst().getAsInt();
         Member member = new Member(id,"NHN아카데미","M", age);
-        return member;
+        return ResponseEntity.ok(member);
     }
 
 }
