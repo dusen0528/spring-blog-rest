@@ -1,0 +1,57 @@
+= Basic Authentication
+
+
+== Basic Authentication 란?
+* 로그인 Form ( 아이디 / 비밀번호 ) 입력없이 기본인증
+
+image:resources/image-2.png[]
+
+image:resources/image-4.png[]
+
+
+== 동작
+
+* 서버는 클라이언트에게 401 (Unauthorized) 응답 코드를 가지고 응답하며, 최소한 한 번의 시도에 포함된 WWW-Authenticate 응답 헤더로 권한을 부여하는 방법에 대한 정보를 제공합니다.
+
+* 서버와 인증을 하기를 원하는 클라이언트는 Authorization 요청 헤더 필드에 인증 정보를 포함함으로써 인증을 수행할 수 있습니다.
+
+
+* 클라이언트는 대개 사용자에게 비밀번호 프롬프트를 표시할 것이고 정확한 Authorization 헤더를 포함하는 요청을 만들 것입니다.
+
+image:resources/image-3.png[]
+
+[source,log]
+----
+Authorization: Basic <credentials>
+----
+
+* credentials
+[source,log]
+----
+id : nhnacademy
+pw : 1234
+credentials : nhnacademy:1234 -> Base64 encoding
+----
+
+[source,log]
+----
+Authorization: Basic bmhuYWNhZGVteToxMjM0
+----
+
+== Basic Authentication, Spring Security
+
+[source,java]
+----
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) {
+	http
+		// ...
+		.httpBasic(withDefaults());
+	return http.build();
+}
+----
+
+
+== Reference
+* https://developer.mozilla.org/ko/docs/Web/HTTP/Authentication[MDN, Http 인증]
+* https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/basic.html[Spring Security, Basic Authentication]

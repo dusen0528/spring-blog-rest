@@ -28,6 +28,10 @@ public class RouteLocatorConfig {
 
     @Bean
     public RouteLocator myRoute(RouteLocatorBuilder builder) {
+
+        RouteLocator routeLocator =  builder.routes().build();
+
+
         return builder.routes()
                 .route("hello-service",
                         p->p.path("/hello").and()
@@ -51,6 +55,9 @@ public class RouteLocatorConfig {
 //                .build();
 
         //http://httpbin.org/get
+
+
+
 
     }
 }
