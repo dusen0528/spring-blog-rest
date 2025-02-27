@@ -1,0 +1,54 @@
+logging:
+  level:
+    root: debug
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: trace
+        sql: debug
+
+      springframework:
+        transaction:
+          interceptor: trace
+          #Security관련 exception 디버깅 하기위해서 반드시 설정해야함.
+        security: trace
+spring:
+  jpa:
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        show_sql: true
+        hbm2ddl:
+          auto: create
+        highlight_sql: true
+        auto_quote_keyword: true
+
+  datasource:
+    type: org.apache.commons.dbcp2.BasicDataSource
+    dbcp2:
+      min-idle: 3
+      max-idle: 3
+      max-total: 3
+      initial-size: 3
+      driver-class-name: org.h2.Driver
+
+decorator:
+  datasource:
+    datasource-proxy:
+      logging: slf4j
+      query:
+        enable-logging: true
+        log-level: DEBUG
+        logger-name:
+      slow-query:
+        enable-logging: true
+        log-level: WARN
+        logger-name:
+        threshold: 3
+      multiline: true
+      json-format: false
+      count-query: false

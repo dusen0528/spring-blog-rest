@@ -1,0 +1,44 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <springProfile name="dev">
+        <logger name="p6spy" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+
+        <logger name="org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl" level="info" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+
+        <!-- bindding parameter 출력 -->
+        <logger name="org.hibernate.orm" level="trace" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+
+        <logger name="org.hibernate.orm.results.graph.AST" level="off" additivity="false"></logger>
+        <logger name="sun.rmi" level="off"></logger>
+        <logger name="javax.management.remote" level="off"></logger>
+
+        <root level="debug">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="error">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="local">
+        <root level="debug">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+
+</configuration>

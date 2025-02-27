@@ -1,0 +1,74 @@
+### no -> 1 회원조회(json)
+GET http://localhost:8001/api/blog/members/1
+Accept: application/json
+
+### no -> 1 회원조회(xml)
+GET http://localhost:8001/api/blog/members/1
+Accept: application/xml
+
+### no -> 100 존재하지 않는 회원
+GET http://localhost:8001/api/blog/members/100
+Accept: application/json
+
+### 모든 회원조회 - 1, page
+GET http://localhost:8001/api/blog/members?page=1
+Accept: application/json
+
+### 모든 회원조회 - 2, page
+GET http://localhost:8001/api/blog/members?page=2
+Accept: application/json
+
+### 회원 등록 - 201
+POST http://localhost:8001/api/blog/members
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email" : "marco11@nhnacademy.com",
+    "name" : "marco11",
+    "password" : "test1234!@#",
+    "mobile" : "01099990011",
+    "blogFid" : "marco11"
+}
+
+### 회원 등록 - 이메일 중복체크 409 conflict
+POST http://localhost:8001/api/blog/members
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email" : "marco11@nhnacademy.com",
+  "name" : "marco11",
+  "password" : "test1234!@#",
+  "mobile" : "01099990011",
+  "blogFid" : "marco11"
+}
+
+### 회원 등록 - 이메일 형식 체크 400 bad request
+POST http://localhost:8001/api/blog/members
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email" : "marco11---nhnacademy.com",
+  "name" : "marco11",
+  "password" : "test1234!@#",
+  "mobile" : "01099990011",
+  "blogFid" : "marco11"
+}
+
+### 회원삭제
+DELETE http://localhost:8001/api/blog/members/1
+Accept: application/json
+
+### 회원수정
+PUT http://localhost:8001/api/blog/members/1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email" : "marco11@nhnacademy.com",
+  "name" : "marco11",
+  "password" : "test1234!@#",
+  "mobile" : "01099990011"
+}
