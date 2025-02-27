@@ -29,13 +29,10 @@ public class RouteLocatorConfig {
     @Bean
     public RouteLocator myRoute(RouteLocatorBuilder builder) {
 
-        RouteLocator routeLocator =  builder.routes().build();
-
-
         return builder.routes()
-                .route("hello-service",
-                        p->p.path("/hello").and()
-                        .uri("lb://HELLO-SERVICE")
+                .route("blog-api",
+                        p->p.path("/api/blog/**").and()
+                                .uri("lb://BLOG-API")
                 )
                 .build();
 
