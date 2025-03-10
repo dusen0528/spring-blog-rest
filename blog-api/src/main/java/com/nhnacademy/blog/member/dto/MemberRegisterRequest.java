@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
+import org.springframework.validation.annotation.Validated;
 
 
 @Getter
@@ -48,18 +50,29 @@ public class MemberRegisterRequest {
     )
     private final String blogFid;
 
+    @NotNull
+    private final Integer topicId;
+
+
+    @NotBlank(message = "기본 카테고리는 필수 입력 항목입니다.")
+    private final String categoryName;
+
     @JsonCreator
     public MemberRegisterRequest(
             @JsonProperty("email") String mbEmail,
             @JsonProperty("name") String mbName,
             @JsonProperty("password") String mbPassword,
             @JsonProperty("mobile") String mbMobile,
-            @JsonProperty("blogFid") String blogFid
+            @JsonProperty("blogFid") String blogFid,
+            @JsonProperty("topicId") Integer topicId,
+            @JsonProperty("categoryName")String categoryName
     ) {
         this.mbEmail = mbEmail;
         this.mbName = mbName;
         this.mbPassword = mbPassword;
         this.mbMobile = mbMobile;
         this.blogFid = blogFid;
+        this.topicId = topicId;
+        this.categoryName = categoryName;
     }
 }
