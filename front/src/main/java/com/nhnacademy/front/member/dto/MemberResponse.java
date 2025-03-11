@@ -6,15 +6,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import java.time.LocalDateTime;
-
 @Value
 @AllArgsConstructor
+@NoArgsConstructor(force = true)
 @EqualsAndHashCode(callSuper = false)
 @JacksonXmlRootElement(localName = "member")
 public class MemberResponse {
+
 
     //회원_번호
     @JsonProperty("no")

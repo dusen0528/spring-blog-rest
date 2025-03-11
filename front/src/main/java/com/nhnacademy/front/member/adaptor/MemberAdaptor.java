@@ -17,11 +17,12 @@ import com.nhnacademy.front.member.dto.MemberRegisterRequest;
 import com.nhnacademy.front.member.dto.MemberResponse;
 import com.nhnacademy.front.member.dto.MemberUpdateRequest;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
-@FeignClient(name = "memberAdaptor", url = "http://localhost:8080", path = "/api/blog/members")
+@FeignClient(name = "memberAdaptor", url = "${api.blog.url}", path = "/api/blog/members")
 public interface MemberAdaptor {
     @GetMapping("/{member-no}")
     ResponseEntity<MemberResponse> getMember(@PathVariable(value = "member-no")Long memberNo);
