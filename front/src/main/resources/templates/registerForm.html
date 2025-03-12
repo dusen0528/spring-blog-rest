@@ -43,6 +43,10 @@
               <input type="text" class="form-control" id="blogFid" th:field="*{blogFid}" required>
               <small class="text-danger" th:if="${#fields.hasErrors('blogFid')}" th:errors="*{blogFid}"></small>
             </div>
+            <div>
+              <label for="categoryName">카테고리명</label>
+              <input id="categoryName" type="text" th:field="*{categoryName}">
+            </div>
             <div class="form-group">
               <label for="topicId">토픽 선택</label>
               <select class="form-control" id="topicId" th:field="*{topicId}" required>

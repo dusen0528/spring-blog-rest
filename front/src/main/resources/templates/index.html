@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>index page</h1>
+    <div>
+        <a href="/register">회원가입</a>
+    </div>
+</div>
+
+<!-- 폼 제출 확인을 위한 JavaScript 추가 -->
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        console.log('폼 제출 시도');
+    });
+</script>
+</body>
+</html>
