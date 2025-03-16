@@ -8,9 +8,11 @@ import com.nhnacademy.blog.member.repository.MemberRepository;
 import com.nhnacademy.blog.member.service.impl.MemberServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -35,8 +37,6 @@ class MemberServiceTest {
     @InjectMocks
     MemberServiceImpl memberService;
 
-    @Mock
-    PasswordEncoder passwordEncoder;
 
     @Test
     @DisplayName("멤버 회원가입")

@@ -31,9 +31,12 @@ public class RouteLocatorConfig {
 
         return builder.routes()
                 .route("blog-api",
-                        p->p.path("/api/blog/**").and()
+                        p -> p.path("/api/blog/**").and()
                                 .uri("lb://BLOG-API")
                 )
+                .route("auth-api",
+                        p -> p.path("/api/auth/**")
+                                .uri("lb://AUTH-API"))
                 .build();
 
 
@@ -56,8 +59,6 @@ public class RouteLocatorConfig {
 //                .build();
 
         //http://httpbin.org/get
-
-
 
 
     }
