@@ -41,7 +41,7 @@ public class JwtProvider {
             Jwts.parserBuilder()
                     .setSigningKey(key) // 서명을 검증하기 위해 키를 설정
                     .build()   // 파서를 빌드하여 실제 검증 작업을 수행할 준비를 완료
-                    .parseClaimsJwt(token); // 전달받은 토큰을 파싱하여 서명 및 구조가 올바른지 확인
+                    .parseClaimsJws(token); // 전달받은 토큰을 파싱하여 서명 및 구조가 올바른지 확인
 
             return true;
         }catch(Exception e){
@@ -63,7 +63,7 @@ public class JwtProvider {
         return Jwts.parserBuilder()
                 .setSigningKey(key) // 서명을 검증하기 위해 키를 설정
                 .build() // 파서를 빌드하여 실제 검증 작업을 수행할 준비 완료
-                .parseClaimsJwt(token) // 전달받은 토큰을 파싱하여 Claims 객체 반환
+                .parseClaimsJws(token) // 전달받은 토큰을 파싱하여 Claims 객체 반환
                 .getBody() // Claims 객체에서 페이로드(body)를 가져옴
                 .getSubject(); // 페이로드에서 subject 필드(사용자 이메일)를 가져옴
     }
