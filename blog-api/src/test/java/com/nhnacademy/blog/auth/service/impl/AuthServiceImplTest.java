@@ -8,6 +8,7 @@ import com.nhnacademy.blog.common.exception.NotFoundException;
 import com.nhnacademy.blog.common.exception.UnauthorizedException;
 import com.nhnacademy.blog.common.security.JwtProvider;
 import com.nhnacademy.blog.common.security.PasswordEncoder;
+import com.nhnacademy.blog.common.security.impl.BCryptPasswordEncoder;
 import com.nhnacademy.blog.member.domain.Member;
 import com.nhnacademy.blog.member.dto.MemberLoginRequest;
 import com.nhnacademy.blog.member.dto.MemberRegisterRequest;
@@ -20,10 +21,7 @@ import com.nhnacademy.blog.topic.repository.TopicRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -43,8 +41,8 @@ class AuthServiceImplTest {
     @Mock
     MemberRepository memberRepository;
 
-    @Mock
-    PasswordEncoder passwordEncoder;
+    @Spy
+    BCryptPasswordEncoder passwordEncoder;
 
     @Mock
     BlogRepository blogRepository;
@@ -243,14 +241,11 @@ class AuthServiceImplTest {
         Member member = Member.ofNewMember(
                 "test@nhnacademy.com",
                 "TestUser",
-                "password123123!",
+                passwordEncoder.encode("password123123!"),
                 "01012345678"
         );
 
         Mockito.when(memberRepository.findByMbEmail(Mockito.anyString())).thenReturn(Optional.of(member));
-
-        // Mock 설정: 비밀번호 비교 동작 정의 (Mock)
-        Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         // Mock 설정: JWT 생성 동작 정의 (Mock)
         Mockito.when(jwtProvider.generateToken(Mockito.anyString())).thenReturn("mock-jwt-token");
 
@@ -272,17 +267,25 @@ class AuthServiceImplTest {
         Member member = Member.ofNewMember(
                 "test@nhnacademy.com",
                 "TestUser",
-                "password123123!",
+                passwordEncoder.encode("password123123!"),
                 "01012345678"
         );
-        Mockito.when(memberRepository.findByMbEmail(Mockito.anyString())).thenReturn(Optional.of(member));
 
-        // Mock 설정: 비밀번호 불일치 상황 설정(matches가 false 반환)
-        Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
+        Mockito.when(memberRepository.findByMbEmail(Mockito.anyString())).thenReturn(Optional.of(member));
 
         // When & Then: 로그인 로직 실행 시 UnauthorizedException 발생 확인
         assertThrows(UnauthorizedException.class, () -> authService.login(loginRequest));
 
+    }
+
+    @Test
+    @DisplayName("로그인 실패 테스트 - 존재하지 않는 이메일")
+    void notFoundEmail(){
+        Mockito.when(memberRepository.findByMbEmail(Mockito.anyString())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, ()->{
+            authService.login(new MemberLoginRequest("testmail", "testpass"));
+        });
     }
 
 }

@@ -92,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(()->new NotFoundException("이메일 또는 비밀번호가 일치하지 않습니다"));
 
         if (!passwordEncoder.matches(memberLoginRequest.getMbPassword(), member.getMbPassword())) {
-            throw new UnauthorizedException("이메일 또는 비밀번호가 일치하지 않습니다.");
+            throw new UnauthorizedException("비밀번호가 일치하지 않습니다.");
         }
 
         return jwtProvider.generateToken(member.getMbEmail()); // JWT 생성 후 반환
