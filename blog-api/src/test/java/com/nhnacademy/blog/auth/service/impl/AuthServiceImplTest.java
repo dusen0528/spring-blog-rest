@@ -5,7 +5,11 @@ import com.nhnacademy.blog.bloginfo.repository.BlogRepository;
 import com.nhnacademy.blog.category.domain.Category;
 import com.nhnacademy.blog.category.repository.CategoryRepository;
 import com.nhnacademy.blog.common.exception.NotFoundException;
+import com.nhnacademy.blog.common.exception.UnauthorizedException;
+import com.nhnacademy.blog.common.security.JwtProvider;
+import com.nhnacademy.blog.common.security.PasswordEncoder;
 import com.nhnacademy.blog.member.domain.Member;
+import com.nhnacademy.blog.member.dto.MemberLoginRequest;
 import com.nhnacademy.blog.member.dto.MemberRegisterRequest;
 import com.nhnacademy.blog.member.dto.MemberResponse;
 import com.nhnacademy.blog.member.repository.MemberRepository;
@@ -13,11 +17,14 @@ import com.nhnacademy.blog.role.doamin.Role;
 import com.nhnacademy.blog.role.repository.RoleRepository;
 import com.nhnacademy.blog.topic.domain.Topic;
 import com.nhnacademy.blog.topic.repository.TopicRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +44,9 @@ class AuthServiceImplTest {
     MemberRepository memberRepository;
 
     @Mock
+    PasswordEncoder passwordEncoder;
+
+    @Mock
     BlogRepository blogRepository;
 
     @Mock
@@ -48,8 +58,12 @@ class AuthServiceImplTest {
     @Mock
     RoleRepository roleRepository;
 
+    @Mock
+    JwtProvider jwtProvider;
+
     @InjectMocks
     AuthServiceImpl authService;
+
 
     @Test
     @DisplayName("회원가입 테스트")
@@ -79,7 +93,7 @@ class AuthServiceImplTest {
                 }
         ).when(memberRepository).save(Mockito.any(Member.class));
 
-        Role role = new Role("ROLE_USER", "USER", "USER");
+        Role role = new Role("ROLE_MEMBER", "블로그_회원", "USER");
         Mockito.when(roleRepository.findRoleByRoleId(Mockito.anyString())).thenReturn(Optional.of(role));
 
         Mockito.doAnswer(
@@ -218,5 +232,57 @@ class AuthServiceImplTest {
         assertThrows(NotFoundException.class, () -> authService.authRegister(memberRegisterRequest));
     }
 
+
+    @Test
+    @DisplayName("로그인 성공 테스트")
+    void loginSuccess() {
+        // Given: 로그인 요청 데이터 준비
+        MemberLoginRequest loginRequest = new MemberLoginRequest("test@nhnacademy.com", "password123123!");
+
+        // Mock 설정: 데이터베이스에서 사용자 조회
+        Member member = Member.ofNewMember(
+                "test@nhnacademy.com",
+                "TestUser",
+                "password123123!",
+                "01012345678"
+        );
+
+        Mockito.when(memberRepository.findByMbEmail(Mockito.anyString())).thenReturn(Optional.of(member));
+
+        // Mock 설정: 비밀번호 비교 동작 정의 (Mock)
+        Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        // Mock 설정: JWT 생성 동작 정의 (Mock)
+        Mockito.when(jwtProvider.generateToken(Mockito.anyString())).thenReturn("mock-jwt-token");
+
+        // When: 로그인 로직 실행
+        String token = authService.login(loginRequest);
+
+        // Then: 결과 검증
+        assertNotNull(token);
+        assertEquals("mock-jwt-token", token);
+    }
+
+    @Test
+    @DisplayName("로그인 실패 테스트 - 비밀번호 불일치")
+    void loginFail() {
+        // Given: 로그인 요청 데이터 준비
+        MemberLoginRequest loginRequest = new MemberLoginRequest("test@nhnacademy.com", "temp");
+
+        // Mock 설정: 데이터베이스에서 사용자 조회
+        Member member = Member.ofNewMember(
+                "test@nhnacademy.com",
+                "TestUser",
+                "password123123!",
+                "01012345678"
+        );
+        Mockito.when(memberRepository.findByMbEmail(Mockito.anyString())).thenReturn(Optional.of(member));
+
+        // Mock 설정: 비밀번호 불일치 상황 설정(matches가 false 반환)
+        Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
+
+        // When & Then: 로그인 로직 실행 시 UnauthorizedException 발생 확인
+        assertThrows(UnauthorizedException.class, () -> authService.login(loginRequest));
+
+    }
 
 }

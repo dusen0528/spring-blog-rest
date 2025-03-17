@@ -1,6 +1,8 @@
 package com.nhnacademy.blog.controller;
 
 import com.nhnacademy.blog.auth.service.AuthService;
+import com.nhnacademy.blog.common.security.JwtProvider;
+import com.nhnacademy.blog.member.dto.MemberLoginRequest;
 import com.nhnacademy.blog.member.dto.MemberRegisterRequest;
 import com.nhnacademy.blog.member.dto.MemberResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,12 @@ public class AuthController {
 
         log.debug("회원가입 성공 ");
         return new ResponseEntity<>(memberResponse, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody MemberLoginRequest memberLoginRequest){
+        String token = authService.login(memberLoginRequest);
+        return ResponseEntity.ok(token);
     }
 
 
