@@ -20,10 +20,10 @@
                     <div th:if="${param.logout}" class="alert alert-success">
                         로그아웃 되었습니다.
                     </div>
-                    <form th:action="@{/login}" method="post">
+                    <form th:action="@{/api/auth/login}" method="post">
                         <div class="form-group">
-                            <label for="username">아이디</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
+                            <label for="email">이메일</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="form-group">
                             <label for="password">비밀번호</label>
@@ -35,6 +35,9 @@
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">로그인</button>
                     </form>
+                    <div class="mt-3 text-center">
+                        <a th:href="@{/register}" class="btn btn-link">회원가입</a>
+                    </div>
                 </div>
             </div>
         </div>
