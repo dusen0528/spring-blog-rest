@@ -1,5 +1,7 @@
 package com.nhnacademy.blog.member.service.impl;
 
+import com.nhnacademy.blog.bloginfo.repository.BlogRepository;
+import com.nhnacademy.blog.bloginfo.service.BlogService;
 import com.nhnacademy.blog.common.exception.ConflictException;
 import com.nhnacademy.blog.common.exception.NotFoundException;
 import com.nhnacademy.blog.common.security.PasswordEncoder;
@@ -26,11 +28,12 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BlogRepository blogRepository;
+    private final BlogService blogService;
 
     @Transactional
     @Override
     public MemberResponse registerMember(MemberRegisterRequest memberRegisterRequest) {
-
         //1.이메일 중복체크
         boolean isExistsEmail = memberRepository.existsByMbEmail(memberRegisterRequest.getMbEmail());
         if(isExistsEmail) {
@@ -43,9 +46,23 @@ public class MemberServiceImpl implements MemberService {
             throw new ConflictException("Member mobile [%s] already exists".formatted(memberRegisterRequest.getMbMobile()));
         }
 
+        // 3. 회원 생성 및 저장
         String mbPassword = passwordEncoder.encode(memberRegisterRequest.getMbPassword());
-        Member member = Member.ofNewMember(memberRegisterRequest.getMbEmail(), memberRegisterRequest.getMbName(), mbPassword, memberRegisterRequest.getMbMobile());
+        Member member = Member.ofNewMember(
+                memberRegisterRequest.getMbEmail(),
+                memberRegisterRequest.getMbName(),
+                mbPassword,
+                memberRegisterRequest.getMbMobile()
+        );
         memberRepository.save(member);
+
+        // 4. 메인 블로그 생성 (BlogService 활용)
+        blogService.createMainBlogForMember(
+                member,
+                memberRegisterRequest.getBlogFid(),
+                memberRegisterRequest.getCategoryName(),
+                memberRegisterRequest.getTopicId()
+        );
 
         Optional<Member> memberOptional = memberRepository.findById(member.getMbNo());
         if(memberOptional.isPresent()) {
@@ -54,6 +71,7 @@ public class MemberServiceImpl implements MemberService {
 
         throw new NotFoundException("Member not found");
     }
+
 
     @Override
     public MemberResponse getMember(long mbNo) {
@@ -108,6 +126,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private MemberResponse toMemberResponse(Member member) {
+        String blogFid = blogRepository.findBlogFidFromMainBlog(member.getMbNo());
+
         return new MemberResponse(
                 member.getMbNo(),
                 member.getMbEmail(),
@@ -115,7 +135,8 @@ public class MemberServiceImpl implements MemberService {
                 member.getMbMobile(),
                 member.getCreatedAt(),
                 member.getUpdatedAt(),
-                member.getWithdrawalAt()
+                member.getWithdrawalAt(),
+                blogFid
         );
     }
 }

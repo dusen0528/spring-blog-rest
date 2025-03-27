@@ -6,12 +6,14 @@ import com.nhnacademy.blog.bloginfo.dto.BlogUpdateRequest;
 import com.nhnacademy.blog.bloginfo.service.BlogService;
 import com.nhnacademy.blog.common.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/blogs")
+@Slf4j
 @RequiredArgsConstructor
 public class BlogController {
     // TODO# 9999 테스트코드 만들기
@@ -26,7 +28,9 @@ public class BlogController {
 
     @GetMapping("/{blogFid}")
     public ResponseEntity<BlogResponse> getBlogByFid(@PathVariable String blogFid){
+        log.debug("blogFid 로그: {} ", blogFid);
         BlogResponse blogResponse = blogService.getBlogByFid(blogFid);
+        log.debug("BlogController 로그 blog Response : {}", blogResponse);
         return ResponseEntity.ok(blogResponse);
     }
 

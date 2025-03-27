@@ -1,57 +1,64 @@
-package com.nhnacademy.blog.bloginfo.dto;
+package com.nhnacademy.front.blog.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nhnacademy.blog.blogmember.domain.BlogMemberMapping;
-import com.nhnacademy.blog.category.domain.Category;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Value
+@NoArgsConstructor(force = true)
+@EqualsAndHashCode(callSuper = false)
+@JacksonXmlRootElement(localName = "blog")
 public class BlogResponse {
+
+    // 블로그 ID
     @JsonProperty("blogId")
-    Long blogId;
+    private final Long blogId;
 
-    @JsonProperty("categories")
-    List<Category> categories;
-
-    @JsonProperty("blogMemberMappings")
-    List<BlogMemberMapping> blogMemberMappings;
-
+    // 블로그 FID
     @JsonProperty("blogFid")
-    String blogFid;
+    private final String blogFid;
 
+    // 메인 블로그 여부
     @JsonProperty("blogMain")
-    boolean blogMain;
+    private final boolean blogMain;
 
+    // 블로그 이름
     @JsonProperty("blogName")
-    String blogName;
+    private final String blogName;
 
+    // 블로그 닉네임
     @JsonProperty("blogMbNickName")
-    String blogMbNickName;
+    private final String blogMbNickName;
 
+    // 블로그 설명
     @JsonProperty("blogDescription")
-    String blogDescription;
+    private final String blogDescription;
 
+    // 생성일자
     @JsonProperty("createdAt")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
+    // 수정일자
     @JsonProperty("updatedAt")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime updatedAt;
+    private final LocalDateTime updatedAt;
 
+    // 블로그 공개 여부
     @JsonProperty("blogIsPublic")
-    Boolean blogIsPublic;
+    private final Boolean blogIsPublic;
 
     @JsonCreator
+
     public BlogResponse(
             @JsonProperty("blogId") Long blogId,
-            @JsonProperty("categories") List<Category> categories,
-            @JsonProperty("blogMemberMappings") List<BlogMemberMapping> blogMemberMappings,
             @JsonProperty("blogFid") String blogFid,
             @JsonProperty("blogMain") boolean blogMain,
             @JsonProperty("blogName") String blogName,
@@ -61,8 +68,6 @@ public class BlogResponse {
             @JsonProperty("updatedAt") LocalDateTime updatedAt,
             @JsonProperty("blogIsPublic") Boolean blogIsPublic) {
         this.blogId = blogId;
-        this.categories = categories;
-        this.blogMemberMappings = blogMemberMappings;
         this.blogFid = blogFid;
         this.blogMain = blogMain;
         this.blogName = blogName;

@@ -22,7 +22,7 @@ public class SecurityConfig {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**", "/api/blog/**").permitAll()
+                        auth.requestMatchers("/api/auth/**", "/api/blog/**", "/api/blogs/**").permitAll()
                                 .anyRequest().authenticated()).addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${blog.blogName}">블로그</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .blog-header {
+            padding: 2rem 0;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .blog-description {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-top: 1rem;
+        }
+
+        .blog-meta {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+
+        .blog-content {
+            margin-top: 2rem;
+        }
+
+        .sidebar {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+        }
+
+        .post-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/">블로그 홈</a>
+        <button class="navbar-toggler" data-target="#navbarNav" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <!-- 로그인하지 않은 경우 -->
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" href="/login">로그인</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" href="/register">회원가입</a>
+                </li>
+                <!-- 로그인한 경우 -->
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <span class="nav-link">
+                        <span th:text="${#authentication.name}">사용자</span>님 환영합니다!
+                    </span>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/logout">로그아웃</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <!-- 블로그 헤더 -->
+    <div class="blog-header text-center">
+        <h1 class="blog-title" th:text="${blog.blogName}">블로그 이름</h1>
+        <p class="blog-description" th:text="${blog.blogDescription}">블로그 설명</p>
+        <p class="blog-meta">
+            <span>블로그 주인: </span>
+            <span th:text="${blog.blogMbNickName}">닉네임</span>
+            <span> | 개설일: </span>
+            <span th:text="${#temporals.format(blog.createdAt, 'yyyy년 MM월 dd일')}">2023년 01월 01일</span>
+        </p>
+    </div>
+
+    <div class="row mt-4">
+        <!-- 메인 콘텐츠 영역 -->
+        <div class="col-md-8 blog-content">
+            <h3 class="mb-4">최근 게시글</h3>
+
+            <!-- 게시글이 없을 경우 -->
+            <div class="alert alert-info" th:if="${#lists.isEmpty(posts)}">
+                아직 작성된 게시글이 없습니다.
+            </div>
+
+            <!-- 게시글 목록 (실제 데이터 연동 필요) -->
+            <div class="post-item">
+                <h4>첫 번째 게시글 제목</h4>
+                <p class="text-muted">2023년 03월 24일</p>
+                <p>게시글 내용의 일부가 여기에 표시됩니다...</p>
+                <a href="#" class="btn btn-sm btn-outline-primary">자세히 보기</a>
+            </div>
+
+            <div class="post-item">
+                <h4>두 번째 게시글 제목</h4>
+                <p class="text-muted">2023년 03월 23일</p>
+                <p>게시글 내용의 일부가 여기에 표시됩니다...</p>
+                <a href="#" class="btn btn-sm btn-outline-primary">자세히 보기</a>
+            </div>
+        </div>
+
+        <!-- 사이드바 영역 -->
+        <div class="col-md-4">
+            <div class="sidebar">
+                <h4>카테고리</h4>
+                <ul class="list-unstyled">
+                    <li><a href="#">전체 글 보기</a></li>
+                    <li><a href="#">카테고리 1</a></li>
+                    <li><a href="#">카테고리 2</a></li>
+                    <li><a href="#">카테고리 3</a></li>
+                </ul>
+
+                <h4 class="mt-4">블로그 정보</h4>
+                <p>
+                    <span th:if="${blog.blogIsPublic}">공개 블로그</span>
+                    <span th:unless="${blog.blogIsPublic}">비공개 블로그</span>
+                </p>
+
+                <!-- 블로그 주인인 경우에만 표시 -->
+                <div sec:authorize="isAuthenticated()" th:if="${#authentication.name == blog.blogMbNickName}">
+                    <h4 class="mt-4">관리</h4>
+                    <a href="#" class="btn btn-sm btn-primary">글 작성하기</a>
+                    <a href="#" class="btn btn-sm btn-secondary">블로그 설정</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-light py-4 mt-5">
+    <div class="container text-center">
+        <p class="mb-0">© 2023 블로그 시스템. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS 및 의존성 -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

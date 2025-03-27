@@ -23,8 +23,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     public JwtAuthenticationFilter(JwtProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
-        this.allowedPaths = List.of("/api/auth/login", "/api/auth/register", "/login", "/register");
-    }
+        this.allowedPaths = List.of("/", "/login", "/register", "/api/auth/login", "/api/auth/register", "/api/blog/topics");    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -64,7 +63,11 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     }
 
     private boolean isAllowedPath(String path) {
-        return allowedPaths.stream().anyMatch(path::startsWith);
+        if (allowedPaths.contains(path)) {
+            return true;
+        }
+        return path.startsWith("/api/auth/") || path.startsWith("/api/blog/") ||
+                path.startsWith("/css/") || path.startsWith("/js/");
     }
 
     private String extractToken(ServerHttpRequest request) {

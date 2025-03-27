@@ -17,7 +17,6 @@ import com.nhnacademy.front.member.dto.MemberRegisterRequest;
 import com.nhnacademy.front.member.dto.MemberResponse;
 import com.nhnacademy.front.member.dto.MemberUpdateRequest;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
@@ -41,4 +40,7 @@ public interface MemberAdaptor {
 
     @DeleteMapping("/{member-no}")
     ResponseEntity<Void> deleteMember(@PathVariable(value = "member-no")Long memberNo);
+
+    @GetMapping("/email/{email}")
+    ResponseEntity<MemberResponse> getMemberByEmail(@PathVariable String email);
 }

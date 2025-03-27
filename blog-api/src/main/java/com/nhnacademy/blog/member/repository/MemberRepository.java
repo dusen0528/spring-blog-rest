@@ -55,11 +55,4 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
      */
     long countByWithdrawalAtIsNull();
 
-
-    /** Entity가 아닌 MemberResponse 응답
-     * select * from members order by created_at asc
-     *  - JPA에서는 인터페이스 기반의 Projection을 지원합니다.
-     *  - 이 방식은 SQL 쿼리 결과를 자동으로 DTO로 매핑 하고, 필요한 컬럼만 선택적으로 가져올 수 있습니다.
-     */
-    List<MemberResponse> findAllByOrderByCreatedAtAsc();
 }

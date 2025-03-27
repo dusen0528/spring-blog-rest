@@ -136,11 +136,5 @@ class MemberRepositoryTest {
         assertEquals(1, count, "탈퇴하지 않은 멤버 수가 정확해야 합니다.");
     }
 
-    @Test
-    @DisplayName("모든 멤버 조회 - 생성일 오름차순")
-    void findAllByOrderByCreatedAtAsc() {
-        List<MemberResponse> members = memberRepository.findAllByOrderByCreatedAtAsc();
-        assertFalse(members.isEmpty(), "멤버 목록이 비어있으면 안 됩니다.");
-        assertEquals(member.getMbEmail(), members.get(0).getMbEmail(), "멤버 목록이 올바르게 조회되어야 합니다.");
-    }
+
 }

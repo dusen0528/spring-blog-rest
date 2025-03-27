@@ -28,38 +28,18 @@ public class RouteLocatorConfig {
 
     @Bean
     public RouteLocator myRoute(RouteLocatorBuilder builder) {
-
         return builder.routes()
                 .route("blog-api",
-                        p -> p.path("/api/blog/**").and()
-                                .uri("lb://BLOG-API")
-                )
+                        p -> p.path("/api/blog/**")
+                                .uri("lb://blog-api")                )
                 .route("auth-api",
                         p -> p.path("/api/auth/**")
-                                .uri("lb://AUTH-API"))
+                                .uri("lb://blog-api")
+                )  // AUTH-API 대신 BLOG-API로 변경
+                .route("front-service",
+                        p -> p.path("/register", "/login", "/", "/css/**", "/js/**", "/favicon.ico")
+                                .uri("lb://front-api")
+                )
                 .build();
-
-
-        //http://localhost:80/hello
-
-
-//        return builder.routes()
-//                .route("hello-service-a",
-//                        p->p.path("/hello").and().weight("hello",50).uri("http://localhost:8081/")
-//                        )
-//                .route("hello-service-b",
-//                        p->p.path("/hello").and().weight("hello",50).uri("http://localhost:8082/")
-//                        )
-//                .build();
-
-//        return builder.routes()
-//                .route("get_route", r -> r.path("/account")
-//                        .filters(o->o.addRequestHeader("uuid", UUID.randomUUID().toString()))
-//                        .uri("http://httpbin.org"))
-//                .build();
-
-        //http://httpbin.org/get
-
-
     }
 }

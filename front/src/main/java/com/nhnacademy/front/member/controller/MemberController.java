@@ -38,7 +38,7 @@ public class MemberController {
 
     @PostMapping(value = "/register")
     public String registerMember(@Validated @ModelAttribute MemberRegisterRequest request,
-                                 BindingResult bindingResult, Model model,   RedirectAttributes redirectAttributes){
+                                 BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()){
             try {
                 ResponseEntity<List<TopicResponse>> response = topicAdaptor.getTopics();
@@ -51,8 +51,11 @@ public class MemberController {
 
         try {
             ResponseEntity<MemberResponse> response = memberAdaptor.registerMember(request);
-            redirectAttributes.addFlashAttribute("members", response.getBody());
-            return "redirect:/login";
+            MemberResponse memberResponse = response.getBody();
+
+            String blogFid = memberResponse.getBlogFid();
+            return "redirect:/blogs/" + blogFid;
+
         } catch (Exception e) {
             // 로그 기록
             model.addAttribute("error", "회원가입 처리 중 오류가 발생했습니다: " + e.getMessage());
@@ -69,6 +72,7 @@ public class MemberController {
     public String showLoginForm() {
         return "loginForm";
     }
+
 
 
 }

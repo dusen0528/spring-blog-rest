@@ -63,4 +63,11 @@ public class MemberController {
                 .ok(memberService.updateMember(memberNo, memberUpdateRequest));
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<MemberResponse> getMemberByEmail(@PathVariable String email){
+        MemberResponse memberResponse = memberService.getMemberByEmail(email);
+        return ResponseEntity.ok(memberResponse);
+    }
+
+
 }

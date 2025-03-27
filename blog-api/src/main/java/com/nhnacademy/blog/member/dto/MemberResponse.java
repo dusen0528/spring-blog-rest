@@ -50,4 +50,7 @@ public class MemberResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime withdrawalAt;
 
+    @JsonProperty("blogFid")
+    private final String blogFid;
+
 }
